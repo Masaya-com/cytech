@@ -20,11 +20,10 @@
 
         <div class="form-group">
             <label for="company_id">メーカー名 <span class="text-danger">*</span></label>
-            <select id="company_id" name="company_id" class="form-control" required>
+            <select name="company_id" id="company_id" class="form-control">
+                <option value="">選択してください</option>
                 @foreach($companies as $company)
-                    <option value="{{ $company->id }}" {{ $product->company_id == $company->id ? 'selected' : '' }}>
-                        {{ $company->name }}
-                    </option>
+                    <option value="{{ $company->id }}">{{ $company->company_name }}</option>
                 @endforeach
             </select>
         </div>

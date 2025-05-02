@@ -7,15 +7,15 @@
     <form method="GET" action="{{ route('products.index') }}">
         <div class="form-row">
             <div class="col-md-4 mb-3">
-                <label for="keyword">検索キーワード</label>
-                <input type="text" name="keyword" id="keyword" class="form-control" placeholder="商品名を入力">
+                <label for="product_search">検索キーワード</label>
+                <input type="text" name="product_search" id="product_search" class="form-control" placeholder="商品名を入力">
             </div>
             <div class="col-md-4 mb-3">
-                <label for="company">メーカー名</label>
-                <select name="company" id="company" class="form-control">
+                <label for="company_id">メーカー名</label>
+                <select name="company_id" id="company_id" class="form-control">
                     <option value="">選択してください</option>
                     @foreach($companies as $company)
-                        <option value="{{ $company->id }}">{{ $company->name }}</option>
+                        <option value="{{ $company->id }}">{{ $company->company_name }}</option>
                     @endforeach
                 </select>
             </div>
@@ -56,10 +56,10 @@
                     <td>{{ $product->product_name }}</td>
                     <td>¥{{ number_format($product->price) }}</td>
                     <td>{{ $product->stock }}</td>
-                    <td>{{ $product->company->name }}</td>
+                    <td>{{ $product->company->company_name }}</td>
                     <td>
                         <a href="{{ route('products.show', $product->id) }}" class="btn btn-info btn-sm">詳細</a>
-                        <form method="POST" action="{{ route('products.destroy', $product->id) }}" style="display:inline;">
+                        <form method="POST" action="{{ route('products.destroy', $product->id) }}" class = "d-inline"  onsubmit="return confirm('本当に削除しますか？');">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm">削除</button>
@@ -68,8 +68,6 @@
                 </tr>
             @endforeach
         </tbody>
-    </table>
-    {{ $products->links() }}
-  
+    </table>  
 </div>
 @endsection

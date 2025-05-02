@@ -10,11 +10,18 @@ class ProductController extends Controller
 {
     // 商品一覧の表示
 
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::all();
-        $products = Product::paginate(10); 
         $companies = Company::all();
+        $query = Product::query();
+
+        if($product_search = $request->product_search){
+            $query->where('product_name', 'LIKE', "%{$product_search}%");
+        }
+        if($company_search = $request->company_id){
+            $query->where('company_id', '=', "$company_search");
+        }
+        $products = $query->get();
         return view('products.index', compact('products', 'companies'));
     }
 
@@ -37,7 +44,7 @@ class ProductController extends Controller
             'price' => 'required',
             'stock' => 'required',
             'comment' => 'nullable', 
-            'img_path' => 'nullable|image|max:2048',
+            'img_path' => 'nullable|image',
         ]);
 
         $product = new Product([
@@ -47,6 +54,8 @@ class ProductController extends Controller
             'stock' => $request->get('stock'),
             'comment' => $request->get('comment'),
         ]);
+
+
 
         if($request->hasFile('img_path')){ 
             $filename = $request->img_path->getClientOriginalName();
@@ -63,14 +72,15 @@ class ProductController extends Controller
 
     public function show(Product $product)
     {
-        return view('products.show', ['product' => $product]);
+        return view('products.show', compact('product'));
     }
 
     // 商品の編集画面表示
 
     public function edit(Product $product)
     {
-        return view('products.edit', compact('product'));
+        $companies = Company::all();
+        return view('products.edit', compact('product', 'companies'));
     }
 
     // 商品情報の変更
@@ -99,7 +109,7 @@ class ProductController extends Controller
         {
             $product->delete();
     
-            return redirect('/products');
+            return redirect('products');
         }
   
 }

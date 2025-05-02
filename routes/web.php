@@ -15,22 +15,25 @@ use Illuminate\Support\Facades\Auth;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Route::get('/', function () {
+    return redirect() -> route('auth.login');
+});
+Route::get("/", function () {
+    if (Auth::check()) {
+        return redirect()->route('products.index');
+    } else {
+        return redirect()->route('login');
+    }
+});
 
 Auth::routes();
-Route::get('/', function () {
-    if (Auth::check()) {
-      return redirect()->route('products.index');
-  } else {
-      return redirect()->route('login');
-  }
-});
 
 
 Route::group(['middleware' => 'auth'], function () {
   Route::resource('products', ProductController::class);
 });
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
 
 
