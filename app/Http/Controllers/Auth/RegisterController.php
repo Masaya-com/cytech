@@ -23,12 +23,17 @@ class RegisterController extends Controller
 
     use RegistersUsers;
 
+    protected function registered(\Illuminate\Http\Request $request, $user)
+    {
+        $this->guard()->logout();
+        return redirect('/login');
+    }
     /**
      * Where to redirect users after registration.
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/login';
 
     /**
      * Create a new controller instance.

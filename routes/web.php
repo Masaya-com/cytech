@@ -15,9 +15,10 @@ use Illuminate\Support\Facades\Auth;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/', function () {
-    return redirect() -> route('auth.login');
-});
+
+Auth::routes();
+
+
 Route::get("/", function () {
     if (Auth::check()) {
         return redirect()->route('products.index');
@@ -26,14 +27,8 @@ Route::get("/", function () {
     }
 });
 
-Auth::routes();
 
 
 Route::group(['middleware' => 'auth'], function () {
   Route::resource('products', ProductController::class);
 });
-
-
-
-
-
