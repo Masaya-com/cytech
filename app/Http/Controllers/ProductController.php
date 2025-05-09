@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Company;
+use App\Http\Requests\ProductRequest;
 
 class ProductController extends Controller
 {
@@ -36,37 +37,26 @@ class ProductController extends Controller
     // データの保存と作成
 
 
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        $request->validate([
-            'product_name' => 'required', 
-            'company_id' => 'required',
-            'price' => 'required',
-            'stock' => 'required',
-            'comment' => 'nullable', 
-            'img_path' => 'nullable|image',
-        ]);
+        try {
 
-        $product = new Product([
-            'product_name' => $request->get('product_name'),
-            'company_id' => $request->get('company_id'),
-            'price' => $request->get('price'),
-            'stock' => $request->get('stock'),
-            'comment' => $request->get('comment'),
-        ]);
-
-
-
-        if($request->hasFile('img_path')){ 
-            $filename = $request->img_path->getClientOriginalName();
-            $filePath = $request->img_path->storeAs('products', $filename, 'public');
-            $product->img_path = '/storage/' . $filePath;
+            $product = new Product($request->validated());
+    
+            if ($request->hasFile('img_path')) { 
+                $filename = $request->img_path->getClientOriginalName();
+                $filePath = $request->img_path->storeAs('products', $filename, 'public');
+                $product->img_path = '/storage/' . $filePath;
+            }
+            
+            $product->save();
+            
+            return redirect('products')->with('success', '商品を登録しました。');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', '商品登録中にエラーが発生しました: ' . $e->getMessage());
         }
-
-        $product->save();
-        
-        return redirect('products');
     }
+
 
     // 商品の詳細表示
 
@@ -84,32 +74,37 @@ class ProductController extends Controller
     }
 
     // 商品情報の変更
-    
-    public function update(Request $request, Product $product)
+
+    public function update(ProductRequest $request, Product $product)
     {
+        try {
+            $product->fill($request->validated());
 
-        $request->validate([
-            'product_name' => 'required',
-            'price' => 'required',
-            'stock' => 'required',
-        ]);
-
-        $product->product_name = $request->product_name;
-        $product->price = $request->price;
-        $product->stock = $request->stock;
-
-        $product->save();
-       
-        return redirect()->route('products.index');    
+            if ($request->hasFile('img_path')) { 
+                $filename = $request->img_path->getClientOriginalName();
+                $filePath = $request->img_path->storeAs('products', $filename, 'public');
+                $product->img_path = '/storage/' . $filePath;
+            }
+    
+            $product->save();
+           
+            return redirect()->route('products.index')->with('success', '商品情報を更新しました。');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', '商品更新中にエラーが発生しました: ' . $e->getMessage());
+        }
     }
+
 
     // 商品の削除
 
     public function destroy(Product $product)
-        {
+    {
+        try {
             $product->delete();
-    
-            return redirect('products');
+            return redirect('products')->with('success', '商品を削除しました。');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', '商品削除中にエラーが発生しました: ' . $e->getMessage());
         }
+    }
   
 }

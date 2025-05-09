@@ -2,6 +2,17 @@
 
 @section('content')
 <div class="container">
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
     <h1>商品情報編集画面</h1>
 
     <form method="POST" action="{{ route('products.update', $product->id) }}" enctype="multipart/form-data">
