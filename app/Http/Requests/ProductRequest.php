@@ -32,4 +32,15 @@ class ProductRequest extends FormRequest
             'img_path' => 'nullable|image|max:2048',
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'product_name.required' => '商品名が入力されていません',
+            'company_id.required' => 'メーカー名が選択されていません',
+            'price.required' => '価格が入力されていません',
+            'stock.required' => '在庫数が入力されていません',
+            'img_path.max' => '画像ファイルは2MB以内で指定してください',
+        ];
+    }
 }

@@ -46,7 +46,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
 
     // 商品更新処理
-    Route::put('/products', [ProductController::class, 'update'])->name('products.update');
+    Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
 
     // 商品削除処理
     Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');

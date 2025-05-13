@@ -13,6 +13,16 @@
             {{ session('error') }}
         </div>
     @endif
+
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <h1>商品情報編集画面</h1>
 
     <form method="POST" action="{{ route('products.update', $product->id) }}" enctype="multipart/form-data">
@@ -26,7 +36,7 @@
 
         <div class="form-group">
             <label for="product_name">商品名<span class="text-danger">*</span></label>
-            <input type="text" id="product_name" name="product_name" class="form-control" value="{{ $product->product_name }}" required>
+            <input type="text" id="product_name" name="product_name" class="form-control" value="{{ $product->product_name }}">
         </div>
 
         <div class="form-group">
@@ -41,12 +51,12 @@
 
         <div class="form-group">
             <label for="price">価格<span class="text-danger">*</span></label>
-            <input type="number" id="price" name="price" class="form-control" value="{{ $product->price }}" required>
+            <input type="number" id="price" name="price" class="form-control" value="{{ $product->price }}">
         </div>
 
         <div class="form-group">
             <label for="stock">在庫数<span class="text-danger">*</span></label>
-            <input type="number" id="stock" name="stock" class="form-control" value="{{ $product->stock }}" required>
+            <input type="number" id="stock" name="stock" class="form-control" value="{{ $product->stock }}">
         </div>
 
         <div class="form-group">
