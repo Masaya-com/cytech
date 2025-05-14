@@ -19,13 +19,7 @@ use Illuminate\Support\Facades\Auth;
 Auth::routes();
 
 
-Route::get("/", function () {
-    if (Auth::check()) {
-        return redirect()->route('products.index');
-    } else {
-        return redirect()->route('login');
-    }
-});
+
 
 
 
