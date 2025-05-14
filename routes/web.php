@@ -18,11 +18,6 @@ use Illuminate\Support\Facades\Auth;
 
 Auth::routes();
 
-
-
-
-
-
 Route::group(['middleware' => 'auth'], function () {
     // 商品一覧
     Route::get('/products', [ProductController::class, 'index'])->name('products.index');
