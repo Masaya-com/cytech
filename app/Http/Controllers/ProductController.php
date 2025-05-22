@@ -19,9 +19,32 @@ class ProductController extends Controller
         if($product_search = $request->product_search){
             $query->where('product_name', 'LIKE', "%{$product_search}%");
         }
+        
         if($company_search = $request->company_id){
             $query->where('company_id', '=', "$company_search");
         }
+
+        if($min_price = $request->min_price){
+            $query->where('price', '>=', $min_price);
+        }
+
+        if($max_price = $request->max_price){
+            $query->where('price', '<=', $max_price);
+        }
+
+        if($min_stock = $request->min_stock){
+            $query->where('stock', '>=', $min_stock);
+        }  
+
+        if($max_stock = $request->max_stock){
+            $query->where('stock', '<=', $max_stock);
+        }
+
+        if($sort = $request->sort){
+            $direction = $request->direction == 'desc' ? 'desc' : 'asc'; 
+            $query->orderBy($sort, $direction);
+        }
+
         $products = $query->get();
         return view('products.index', compact('products', 'companies'));
     }
@@ -93,7 +116,6 @@ class ProductController extends Controller
             return redirect()->back()->with('error', '商品更新中にエラーが発生しました: ' . $e->getMessage());
         }
     }
-
 
     // 商品の削除
 
